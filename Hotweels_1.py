@@ -30,10 +30,19 @@ def salvar_carrinhos(carrinhos):
     except IOError:
         print("Erro ao salvar os carrinhos.")
 
-def listar_carrinhos(carrinhos):
-    print('Lista de carrinhos cadastrados:')
-    for i, carrinho in enumerate(carrinhos, start=1):
-        print(f'{i}. Nome: {carrinho.nome}, Cor: {carrinho.cor}, Modelo: {carrinho.modelo}, Ano: {carrinho.ano}')
+def listar_carrinhos():
+    try:
+        with open("carrinhos.txt", "r") as file:
+            linhas = file.readlines()
+            if linhas:
+                print('Lista de carrinhos cadastrados:')
+                for i, linha in enumerate(linhas, start=1):
+                    dados = linha.strip().split(',')
+                    print(f'{i}. Nome: {dados[0]}, Cor: {dados[1]}, Modelo: {dados[2]}, Ano: {dados[3]}')
+            else:
+                print('Ops! Não há carrinhos cadastrados.')
+    except FileNotFoundError:
+        print("Arquivo de carrinhos não encontrado.")
 
 def main():
     carrinhos = []
@@ -50,10 +59,7 @@ def main():
         if opcao == "1":
             carrinhos.append(cadastrar_carrinho())
         elif opcao == "2":
-            if carrinhos:
-                listar_carrinhos(carrinhos)
-            else:
-                print('Ops! Você ainda não tem carrinhos cadastrados.')
+            listar_carrinhos()
         elif opcao == "3":
             if carrinhos:
                 salvar_carrinhos(carrinhos)
